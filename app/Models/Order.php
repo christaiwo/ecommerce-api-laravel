@@ -15,4 +15,9 @@ class Order extends Model
         'payment_method',
         'status',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }
