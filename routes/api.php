@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // group this route by Version 1 of this software
 Route::group(['prefix' => 'v1'], function(){
+    
     // group this route by account
     Route::group(['prefix' => 'account'], function(){
         Route::post('/register', [\App\Http\Controllers\Api\V1\AuthController::class, 'register']); 
@@ -30,6 +31,15 @@ Route::group(['prefix' => 'v1'], function(){
         // all middleware route for authenticated users
         Route::group(['middleware' => 'auth:sanctum'], function(){
             Route::post('/logout', [\App\Http\Controllers\Api\V1\AuthController::class, 'logout']); 
+        });
+    });
+
+
+    // group this route by account
+    Route::group(['prefix' => 'admin'], function(){
+        // all middleware route for authenticated users
+        Route::group(['middleware' => 'auth:sanctum'], function(){
+            Route::apiResource('/category', \App\Http\Controllers\Api\V1\Admin\CategoryController::class);
         });
     });
 
