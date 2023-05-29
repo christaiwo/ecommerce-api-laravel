@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $data = $request->validated();
-        
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -54,9 +54,14 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        //
+        $user = $request->user();
+        
+        /** @var \App\Models\User $user */ 
+        $user->currentAccessToken()->delete();
+        
+        return response()->json([''], 200);
     }
 
 }
