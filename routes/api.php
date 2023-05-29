@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1'], function(){
         // all middleware route for authenticated users
         Route::group(['middleware' => 'auth:sanctum'], function(){
             Route::apiResource('/category', \App\Http\Controllers\Api\V1\Admin\CategoryController::class);
+            Route::apiResource('/product', \App\Http\Controllers\Api\V1\Admin\ProductController::class);
         });
     });
 
