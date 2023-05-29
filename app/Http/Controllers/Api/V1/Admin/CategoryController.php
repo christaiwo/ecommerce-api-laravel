@@ -26,7 +26,7 @@ class CategoryController extends Controller
         $data = $request->validated();
         
         // save image into the system folder
-        if(request('image')){
+        if($data['image']){
 
             // save image to product folder
             $imagePath = $data['image']->store('product', 'public');
@@ -57,7 +57,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
-        if(request('image')){
+        if($data['image']){
 
             // save image to product folder
             $imagePath = $data['image']->store('product', 'public');
