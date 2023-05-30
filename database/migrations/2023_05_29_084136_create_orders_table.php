@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onUpdate('restrict')->onDelete('cascade');
+            $table->foreignId('address_id')->constrained()->onUpdate('restrict')->onDelete('cascade');
             $table->string('hash')->unique();
             $table->string('amount')->default(0);
             $table->string('payment_method')->nullable();
