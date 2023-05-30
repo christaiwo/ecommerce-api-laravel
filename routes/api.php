@@ -31,6 +31,8 @@ Route::group(['prefix' => 'v1'], function(){
         // all middleware route for authenticated users
         Route::group(['middleware' => 'auth:sanctum'], function(){
             Route::post('/logout', [\App\Http\Controllers\Api\V1\AuthController::class, 'logout']); 
+
+            Route::apiResource('/order', \App\Http\Controllers\Api\V1\Account\OrderController::class);
         });
     });
 

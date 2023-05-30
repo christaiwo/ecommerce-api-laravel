@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('welcome');
+});
+
+
+Route::get('/order', function () {
+
+    $order = Order::where('id', 1)->first();
+
+    $order_items = OrderItem::where('id', 1)->first();
+
+    dd($order->items);
     return view('welcome');
 });
