@@ -16,9 +16,10 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $orders = Auth::user()->orders()->with('items.product')->get();
         return response()->json([
-            'orders' => Auth::user()->orders,
-        ]);
+            'orders' => $orders
+        ], 200);
     }
 
     /**

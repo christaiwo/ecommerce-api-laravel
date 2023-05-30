@@ -21,4 +21,9 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+    
+    public function address()
+    {
+        return $this->belongsTo(Address::class, 'address_id');
+    }
 }
