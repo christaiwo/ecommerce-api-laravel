@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1'], function(){
         Route::group(['middleware' => 'auth:sanctum'], function(){
             Route::post('/logout', [\App\Http\Controllers\Api\V1\AuthController::class, 'logout']); 
 
+            Route::apiResource('/address', \App\Http\Controllers\Api\V1\Account\AddressController::class);
             Route::apiResource('/order', \App\Http\Controllers\Api\V1\Account\OrderController::class);
         });
     });
