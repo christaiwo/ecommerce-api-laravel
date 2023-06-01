@@ -65,7 +65,7 @@ class OrderController extends Controller
         
         return response()->json([
             'order' => $order->load('items')
-        ], 200);
+        ], 201);
     }
 
     /**

@@ -27,7 +27,7 @@ class AuthController extends Controller
         /** @var \App\Models\User $user */ 
         $token = $user->createToken('main')->plainTextToken;
 
-        return response()->json(compact('user', 'token'), 200);
+        return response()->json(compact('user', 'token'), 201);
     }
 
     /**

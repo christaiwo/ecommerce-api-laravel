@@ -39,7 +39,7 @@ class CategoryController extends Controller
             'image' => $imagePath
         ]);
 
-        return response()->json(compact('category'), 200);
+        return response()->json(compact('category'), 201);
     }
 
     /**
@@ -69,7 +69,7 @@ class CategoryController extends Controller
             'image' => $imagePath ?? $category->image
         ]);
 
-        return response()->json(compact('category'), 200);
+        return response()->json(compact('category'), 204);
     }
 
     /**

@@ -46,7 +46,7 @@ class ProductController extends Controller
             'sold' => $data['sold'],
         ]);
 
-        return response()->json(compact('product'), 200);
+        return response()->json(compact('product'), 201);
     }
 
     /**
@@ -82,7 +82,7 @@ class ProductController extends Controller
             'sold' => $data['sold'],
         ]);
 
-        return response()->json(compact('product'), 200);
+        return response()->json(compact('product'), 204);
     }
 
     /**
