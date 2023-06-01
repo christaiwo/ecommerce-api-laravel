@@ -29,10 +29,28 @@ class OrderController extends Controller
     {
         $data = $request->validated();
 
+        // check if user just enter a new address for payment
+        if($data['order']['address_id'] == 'new'){
+            $addressData = [
+                'address' => $data['address']['address'],
+                'address2' => $data['address']['address2'],
+                'city' => $data['address']['city'],
+                'region' => $data['address']['region'],
+                'zip' => $data['address']['zip'],
+                'country' => $data['address']['country'],
+            ];
+
+            $address = Auth::user()->address()->create($addressData);
+
+            $orderId = $address->id;
+        }
+
+        // insert order data into the database
         $order = $request->user()->orders()->create([
+            'address_id' => $orderId ?? $data['order']['address_id'],
             'hash' => Str::random(30),
             'amount'=> $data['order']['amount'],
-            'payment_method' => $data['order']['payment_method']
+            'payment_method' => $data['order']['payment_method'],
         ]);
 
         // loop through the items to store them in different tables 
@@ -58,8 +76,6 @@ class OrderController extends Controller
         $order->load(['items' => function ($query) {
             $query->with('product');
         }]);
-
-        // dd(Auth::user()->orders);
         
         return response()->json([
             'order' => $order
