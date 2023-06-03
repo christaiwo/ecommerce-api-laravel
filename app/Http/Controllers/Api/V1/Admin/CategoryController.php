@@ -29,14 +29,14 @@ class CategoryController extends Controller
         if($data['image']){
 
             // save image to product folder
-            $imagePath = $data['image']->store('product', 'public');
+            $imagePath = $data['image']->store('category', 'public');
             // resize image 
             // $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000)->save();
         }
 
         $category = Category::create([
             'name' => $data['name'],
-            'image' => $imagePath
+            'image' => url('storage/'.$imagePath.'')
         ]);
 
         return response()->json(compact('category'), 201);
@@ -60,13 +60,13 @@ class CategoryController extends Controller
         if($data['image']){
 
             // save image to product folder
-            $imagePath = $data['image']->store('product', 'public');
+            $imagePath = $data['image']->store('category', 'public');
             // resize image 
             // $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000)->save();
         }
         $category = $category->update([
             'name' => $data['name'],
-            'image' => $imagePath ?? $category->image
+            'image' => url('storage/'.$imagePath.'') ?? $category->image
         ]);
 
         return response()->json(compact('category'), 204);

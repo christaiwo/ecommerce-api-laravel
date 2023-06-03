@@ -38,7 +38,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'category_id' => $data['category_id'],
-            'image' => $imagePath,
+            'image' => url('storage/'.$imagePath.''),
             'name' => $data['name'],
             'description' => $data['description'],
             'amount' => $data['amount'],
@@ -74,7 +74,7 @@ class ProductController extends Controller
 
         $product = $product->update([
             'category_id' => $data['category_id'],
-            'image' => $imagePath ?? $product->image,
+            'image' => url('storage/'.$imagePath.'') ?? $product->image,
             'name' => $data['name'],
             'description' => $data['description'],
             'amount' => $data['amount'],
