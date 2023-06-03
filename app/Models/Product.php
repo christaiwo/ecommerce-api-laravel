@@ -19,4 +19,9 @@ class Product extends Model
         'sold',
         'status',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }
