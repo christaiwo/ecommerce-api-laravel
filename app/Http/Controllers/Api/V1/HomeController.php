@@ -18,4 +18,18 @@ class HomeController extends Controller
             'products' => $products->load('category')
         ],200);
     }
+
+    public function category(Category $category)
+    {
+        return response()->json([
+            'category' => $category->load('products')
+        ],200);
+    }
+
+    public function product(Product $product)
+    {
+        return response()->json([
+            'product' => $product->load('category')
+        ],200);
+    }
 }
