@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Auth\LoginRequest;
-use App\Http\Requests\V1\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Requests\V1\Auth\LoginRequest;
+use App\Http\Requests\V1\Auth\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -65,4 +66,37 @@ class AuthController extends Controller
         return response()->json([''], 200);
     }
 
+    public function redirectToProvider($provider)
+    {
+        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+
+        return response()->json([
+            'url' => $url
+        ]);
+    }
+
+    public function handleProviderCallback($provider)
+    {
+        $socialUser = Socialite::driver($provider)->stateless()->user();
+        $name = $socialUser->getName();
+
+        // Split the name into separate parts
+        $nameParts = explode(' ', $name);
+        $firstName = $nameParts[0]; // First name
+        $lastName = $nameParts[count($nameParts) - 1]; // Last name
+
+        $user = User::updateOrCreate([
+            'provider_id' => $socialUser->getId()
+        ],[
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'email' => $socialUser->getEmail(),
+            'provider' => $provider
+        ]);
+
+        /** @var \App\Models\User $user */ 
+        $token = $user->createToken('main')->plainTextToken;
+
+        return response()->json(compact('user', 'token'), 201);
+    }
 }

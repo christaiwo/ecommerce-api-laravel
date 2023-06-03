@@ -31,6 +31,9 @@ Route::group(['prefix' => 'v1'], function(){
     Route::group(['prefix' => 'account'], function(){
         Route::post('/register', [\App\Http\Controllers\Api\V1\AuthController::class, 'register']); 
         Route::post('/login', [\App\Http\Controllers\Api\V1\AuthController::class, 'login']); 
+        // social login
+        Route::post('/login/{provider}', [\App\Http\Controllers\Api\V1\AuthController::class, 'redirectToProvider']);
+        Route::get('/login/{provider}/callback', [\App\Http\Controllers\Api\V1\AuthController::class, 'handleProviderCallback']);
         // all middleware route for authenticated users
         Route::group(['middleware' => 'auth:sanctum'], function(){
             Route::post('/logout', [\App\Http\Controllers\Api\V1\AuthController::class, 'logout']); 
