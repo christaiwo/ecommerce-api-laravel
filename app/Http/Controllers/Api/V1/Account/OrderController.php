@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Account;
 
+use App\Mail\OrderConfirmationMail;
 use App\Models\Order;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\V1\Account\StoreOrderRequest;
 use App\Http\Requests\V1\Account\UpdateOrderRequest;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -16,7 +17,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Auth::user()->orders()->with('items.product')->get();
+        /** @var \App\Models\User $user */
+        $user = Auth()->user();
+        $orders = $user->orders()->with('items.product')->get();
         return response()->json([
             'orders' => $orders
         ], 200);
@@ -27,10 +30,12 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth()->user();
         $data = $request->validated();
 
         // check if user just enter a new address for payment
-        if($data['order']['address_id'] == 'new'){
+        if ($data['order']['address_id'] == 'new') {
             $addressData = [
                 'address' => $data['address']['address'],
                 'address2' => $data['address']['address2'],
@@ -40,7 +45,7 @@ class OrderController extends Controller
                 'country' => $data['address']['country'],
             ];
 
-            $address = Auth::user()->address()->create($addressData);
+            $address = $user->address()->create($addressData);
 
             $orderId = $address->id;
         }
@@ -49,12 +54,12 @@ class OrderController extends Controller
         $order = $request->user()->orders()->create([
             'address_id' => $orderId ?? $data['order']['address_id'],
             'hash' => Str::random(30),
-            'amount'=> $data['order']['amount'],
+            'amount' => $data['order']['amount'],
             'payment_method' => $data['order']['payment_method'],
         ]);
 
         // loop through the items to store them in different tables 
-        foreach($data['order_items'] as $item){
+        foreach ($data['order_items'] as $item) {
             $orderItem = [
                 'product_id' => $item['product_id'],
                 'quantity' => $item['quantity'],
@@ -62,9 +67,12 @@ class OrderController extends Controller
             ];
             $order->items()->create($orderItem);
         }
-        
+
+        // dd($user);
+        $createOrder = $order->load('items');
+        Mail::to($user->email)->send(new OrderConfirmationMail($createOrder));
         return response()->json([
-            'order' => $order->load('items')
+            'order' => $createOrder
         ], 201);
     }
 
@@ -76,7 +84,7 @@ class OrderController extends Controller
         $order->load(['items' => function ($query) {
             $query->with('product');
         }]);
-        
+
         return response()->json([
             'order' => $order
         ], 200);
@@ -89,7 +97,7 @@ class OrderController extends Controller
     {
         $data = $request->validated();
         $order->update($data);
-     
+
         return response()->json([], 204);
     }
 

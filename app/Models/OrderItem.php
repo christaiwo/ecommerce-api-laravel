@@ -15,6 +15,7 @@ class OrderItem extends Model
         'price',
     ];
 
+    protected $with = ['product'];
 
     public function order()
     {
