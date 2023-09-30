@@ -31,6 +31,7 @@ Route::group(['prefix' => 'v1'], function(){
     Route::group(['prefix' => 'account'], function(){
         Route::post('/register', [\App\Http\Controllers\Api\V1\AuthController::class, 'register']); 
         Route::post('/login', [\App\Http\Controllers\Api\V1\AuthController::class, 'login']); 
+        Route::post('/authentication', [\App\Http\Controllers\Api\V1\AuthController::class, 'loginRegisterGuest']); 
         // social login
         Route::post('/login/{provider}', [\App\Http\Controllers\Api\V1\AuthController::class, 'redirectToProvider']);
         Route::get('/login/{provider}/callback', [\App\Http\Controllers\Api\V1\AuthController::class, 'handleProviderCallback']);

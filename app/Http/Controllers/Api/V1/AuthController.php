@@ -52,6 +52,40 @@ class AuthController extends Controller
         return response()->json(compact('user', 'token'), 200);
     }
 
+    public function loginRegisterGuest(Request $request)
+    {
+        $data = [
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'password' => 'password'
+        ];
+
+        $checkAccount = User::where('email', $data['email'])->first();
+        if($checkAccount) {
+            if(!Auth::attempt(['email' => $data['email'], 'password' => $data['password'] ])){
+                return response()->json([
+                    'message' => 'Provided email address or password is incorrect'
+                ], 401);
+            }
+            /** @var \App\Models\User $user */ 
+            $user = Auth::user();
+            $token = $user->createToken('main')->plainTextToken;
+            return response()->json(compact('user', 'token'), 200);
+        }
+        
+        $user = User::create([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password'])
+        ]);
+
+        /** @var \App\Models\User $user */ 
+        $token = $user->createToken('main')->plainTextToken;
+        return response()->json(compact('user', 'token'), 201);
+    }
+
 
     /**
      * Store a newly created resource in storage.
