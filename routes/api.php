@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1'], function(){
     // default routes
     Route::get('/', [\App\Http\Controllers\Api\V1\HomeController::class, 'index']);
+    Route::get('/products', [\App\Http\Controllers\Api\V1\HomeController::class, 'products']);
     Route::get('/category/{category}', [\App\Http\Controllers\Api\V1\HomeController::class, 'category']);
     Route::get('/product/{product}', [\App\Http\Controllers\Api\V1\HomeController::class, 'product']);
 

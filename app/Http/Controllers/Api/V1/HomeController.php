@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $products = Product::all();
+        $products = Product::paginate(20);
         return response()->json([
             'categories' => $categories->load('products'),
             'products' => $products->load('category')
@@ -30,6 +30,14 @@ class HomeController extends Controller
     {
         return response()->json([
             'product' => $product->load('category')
+        ],200);
+    }
+
+    public function products()
+    {
+        $products = Product::paginate(20);
+        return response()->json([
+            'product' => $products
         ],200);
     }
 }

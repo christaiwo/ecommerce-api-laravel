@@ -20,6 +20,8 @@ class Product extends Model
         'status',
     ];
 
+    protected $with = ['category'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
