@@ -79,14 +79,21 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Order $order)
+    public function show($order)
     {
-        $order->load(['items' => function ($query) {
+        $getOrder = Order::where('hash', $order)->first();
+
+        if(!$getOrder){
+            return response()->json([
+                'message' => 'No order found'
+            ], 404);
+        }
+        $getOrder->load(['items' => function ($query) {
             $query->with('product');
         }]);
 
         return response()->json([
-            'order' => $order
+            'order' => $getOrder
         ], 200);
     }
 

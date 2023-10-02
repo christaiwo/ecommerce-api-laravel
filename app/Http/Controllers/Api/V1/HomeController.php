@@ -28,8 +28,10 @@ class HomeController extends Controller
 
     public function product(Product $product)
     {
+        $recent = Product::orderBy('created_at', 'desc')->take(5)->get();
         return response()->json([
-            'product' => $product->load('category')
+            'product' => $product->load('category'),
+            'recent' => $recent->load('category')
         ],200);
     }
 
