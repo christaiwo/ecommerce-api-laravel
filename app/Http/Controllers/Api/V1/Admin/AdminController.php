@@ -12,10 +12,12 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
         $order = Order::all();
         $product = Product::all();
         $customer = User::all();
         return response()->json([
+            'user' => $user,
             'count' => [
                 'order' => $order->count(),
                 'product' => $product->count(),
