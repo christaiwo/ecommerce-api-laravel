@@ -1,8 +1,7 @@
 <?php
 
-use App\Models\Order;
-use App\Models\OrderItem;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/run_command', function (){
+    return Artisan::call('storage:link');
+} );
