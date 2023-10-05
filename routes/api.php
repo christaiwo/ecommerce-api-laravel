@@ -48,11 +48,10 @@ Route::group(['prefix' => 'v1'], function(){
     // group this route by account
     Route::group(['prefix' => 'admin'], function(){
         // all middleware route for authenticated users
-        Route::group(['middleware' => 'auth:sanctum'], function(){
-            Route::group(['middleware' => 'isAdmin'], function(){
-                Route::apiResource('/category', \App\Http\Controllers\Api\V1\Admin\CategoryController::class);
-                Route::apiResource('/product', \App\Http\Controllers\Api\V1\Admin\ProductController::class);
-            } );
+        Route::group(['middleware' => 'auth:sanctum', 'isAdmin'], function(){
+            Route::get('/', [\App\Http\Controllers\Api\V1\Admin\AdminController::class, 'index']);
+            Route::apiResource('/category', \App\Http\Controllers\Api\V1\Admin\CategoryController::class);
+            Route::apiResource('/product', \App\Http\Controllers\Api\V1\Admin\ProductController::class);
         });
     });
 
