@@ -64,17 +64,17 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         // save image into the system folder
-        if($data['image']){
+        // if($data['image']){
 
-            // save image to product folder
-            $imagePath = $data['image']->store('product', 'public');
-            // resize image 
-            // $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000)->save();
-        }
+        //     // save image to product folder
+        //     $imagePath = $data['image']->store('product', 'public');
+        //     // resize image 
+        //     // $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000)->save();
+        // }
 
         $product = $product->update([
             'category_id' => $data['category_id'],
-            'image' => url('storage/'.$imagePath.'') ?? $product->image,
+            // 'image' => url('storage/'.$imagePath.'') ?? $product->image,
             'name' => $data['name'],
             'description' => $data['description'],
             'amount' => $data['amount'],
