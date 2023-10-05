@@ -50,6 +50,7 @@ Route::group(['prefix' => 'v1'], function(){
         // all middleware route for authenticated users
         Route::group(['middleware' => 'auth:sanctum', 'isAdmin'], function(){
             Route::get('/', [\App\Http\Controllers\Api\V1\Admin\AdminController::class, 'index']);
+            Route::apiResource('/order', \App\Http\Controllers\Api\V1\Admin\OrderController::class);
             Route::apiResource('/category', \App\Http\Controllers\Api\V1\Admin\CategoryController::class);
             Route::apiResource('/product', \App\Http\Controllers\Api\V1\Admin\ProductController::class);
         });
